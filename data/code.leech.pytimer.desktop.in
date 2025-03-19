@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=pytimer
+Exec=pytimer
+Icon=code.leech.pytimer
+Terminal=false
+Type=Application
+Categories=Utility;
+Keywords=GTK;
+StartupNotify=true
+DBusActivatable=true

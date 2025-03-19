@@ -1,0 +1,8 @@
+# List of source files containing translatable strings.
+# Please keep this file sorted alphabetically.
+data/code.leech.pytimer.desktop.in
+data/code.leech.pytimer.metainfo.xml.in
+data/code.leech.pytimer.gschema.xml
+src/main.py
+src/window.py
+src/window.ui
