@@ -84,3 +84,4 @@ def main(version):
     """The application's entry point."""
     app = PytimerApplication()
     return app.run(sys.argv)
+

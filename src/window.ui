@@ -3,34 +3,145 @@
   <requires lib="gtk" version="4.0"/>
   <requires lib="Adw" version="1.0"/>
   <template class="PytimerWindow" parent="AdwApplicationWindow">
-    <property name="title" translatable="yes">PyTimer</property>
-    <property name="default-width">800</property>
-    <property name="default-height">600</property>
-    <property name="content">
+    <property name="default-width">400</property>
+    <property name="default-height">400</property>
+    <child>
       <object class="AdwToolbarView">
         <child type="top">
-          <object class="AdwHeaderBar">
-            <child type="end">
-              <object class="GtkMenuButton">
-                <property name="primary">True</property>
-                <property name="icon-name">open-menu-symbolic</property>
-                <property name="tooltip-text" translatable="yes">Main Menu</property>
-                <property name="menu-model">primary_menu</property>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <property name="spacing">12</property>
+            <property name="margin-top">24</property>
+            <property name="margin-bottom">24</property>
+            <property name="margin-start">24</property>
+            <property name="margin-end">24</property>
+            <property name="vexpand">true</property>
+            <child>
+              <object class="AdwClamp">
+                <property name="maximum-size">300</property>
+                <child>
+                  <object class="GtkBox">
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">24</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <property name="vexpand">true</property>
+                    <child>
+                      <object class="GtkOverlay" id="timer_overlay">
+                        <property name="halign">center</property>
+                        <child type="overlay">
+                          <object class="GtkLabel" id="time_label">
+                            <property name="label">00:00</property>
+                            <style>
+                              <class name="timer-label"/>
+                            </style>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkDrawingArea" id="progress_circle">
+                            <property name="width-request">200</property>
+                            <property name="height-request">200</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="orientation">horizontal</property>
+                        <property name="spacing">12</property>
+                        <property name="halign">center</property>
+                        <child>
+                          <object class="GtkSpinButton" id="minutes_spin">
+                            <property name="valign">center</property>
+                            <property name="adjustment">
+                              <object class="GtkAdjustment">
+                                <property name="lower">0</property>
+                                <property name="upper">59</property>
+                                <property name="step-increment">1</property>
+                              </object>
+                            </property>
+                            <property name="numeric">true</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="label">minutes</property>
+                            <style>
+                              <class name="dim-label"/>
+                            </style>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
         </child>
-        <property name="content">
-          <object class="GtkLabel" id="label">
-            <property name="label" translatable="yes">Hello, World!</property>
+        <child type="bottom">
+          <object class="GtkBox">
             <style>
-              <class name="title-1"/>
+              <class name="toolbar"/>
             </style>
+            <child>
+              <object class="GtkWindowHandle">
+                <property name="vexpand">false</property>
+                <child>
+                  <object class="GtkHeaderBar">
+                    <property name="show-title-buttons">false</property>
+                    <child type="start">
+                      <object class="GtkBox">
+                        <style>
+                          <class name="linked"/>
+                        </style>
+                      </object>
+                    </child>
+                    <child type="center">
+                      <object class="GtkButton" id="start_button">
+                        <property name="icon-name">media-playback-start-symbolic</property>
+                        <style>
+                          <class name="circular"/>
+                          <class name="flat"/>
+                        </style>
+                      </object>
+                    </child>
+                    <child type="end">
+                      <object class="GtkBox">
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkMenuButton">
+                            <property name="icon-name">open-menu-symbolic</property>
+                            <property name="menu-model">primary_menu</property>
+                            <style>
+                              <class name="flat"/>
+                            </style>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkButton">
+                            <property name="action-name">app.quit</property>
+                            <property name="icon-name">window-close-symbolic</property>
+                            <property name="width-request">24</property>
+                            <property name="height-request">24</property>
+                            <style>
+                              <class name="circular"/>
+                              <class name="closebutton"/>
+                            </style>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
           </object>
-        </property>
+        </child>
       </object>
-    </property>
+    </child>
   </template>
+
   <menu id="primary_menu">
     <section>
       <item>
@@ -42,7 +153,7 @@
         <attribute name="action">win.show-help-overlay</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">_About PyTimer</attribute>
+        <attribute name="label" translatable="yes">_About Timer</attribute>
         <attribute name="action">app.about</attribute>
       </item>
     </section>
