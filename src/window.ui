@@ -85,24 +85,14 @@
           <object class="AdwHeaderBar" id="header_bar">
             <property name="hexpand">true</property>
             <property name="title-widget">
-              <object class="GtkBox">
-                <property name="orientation">horizontal</property>
-                <property name="halign">center</property>
-                <property name="valign">end</property>
-                <property name="margin-bottom">2</property>
-                <child>
-                  <object class="GtkBox" id="button_box">
-                    <property name="orientation">horizontal</property>
-                    <property name="spacing">6</property>
-                  </object>
-                </child>
+              <object class="GtkFixed" id="button_box">
               </object>
             </property>
             <child type="start">
               <object class="GtkMenuButton">
                 <property name="valign">center</property>
-                <property name="margin-start">6</property>
-                <property name="margin-bottom">2</property>
+                <property name="margin-start">12</property>
+                <property name="margin-bottom">4</property>
                 <property name="icon-name">open-menu-symbolic</property>
                 <property name="menu-model">primary_menu</property>
                 <style>

@@ -1,7 +1,7 @@
 {
     "id" : "code.leech.pytimer",
     "runtime" : "org.gnome.Platform",
-    "runtime-version" : "48",
+    "runtime-version" : "47",
     "sdk" : "org.gnome.Sdk",
     "command" : "pytimer",
     "finish-args" : [
@@ -32,13 +32,7 @@
                     "type" : "git",
                     "url" : "file:///home/carbon751/Projects"
                 }
-            ],
-            "config-opts" : [
-                "--libdir=lib"
             ]
         }
-    ],
-    "build-options" : {
-        "env" : {        }
-    }
+    ]
 }
