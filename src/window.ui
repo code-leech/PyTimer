@@ -85,11 +85,12 @@
         <child type="bottom">
           <object class="AdwHeaderBar" id="header_bar">
             <property name="hexpand">true</property>
+            <property name="css-classes">window-margin</property>
             <child type="start">
               <object class="GtkMenuButton">
                 <property name="valign">center</property>
                 <property name="margin-start">12</property>
-                <property name="margin-bottom">4</property>
+                <property name="margin-bottom">0</property>
                 <property name="icon-name">open-menu-symbolic</property>
                 <property name="menu-model">primary_menu</property>
                 <style>
@@ -108,7 +109,7 @@
                     <property name="valign">center</property>
                     <property name="halign">center</property>
                     <property name="hexpand">False</property>
-                    <property name="margin-start">39</property>
+                    <property name="margin-start">55</property>
                     <property name="icon-name">media-playback-start-symbolic</property>
                     <style>
                       <class name="circular"/>

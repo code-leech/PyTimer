@@ -51,8 +51,8 @@ class PytimerWindow(Adw.ApplicationWindow):
             window { margin: 0; }
 
             /* Add margin to the right side of the headerbar's end button */
-            headerbar .end button {
-                margin-right: 12px;
+            .window-margin {
+                margin-right: 8px;
             }
 
             /* Make the reset button REALLY smaller */
@@ -78,8 +78,9 @@ class PytimerWindow(Adw.ApplicationWindow):
         self._update_start_button_state()
 
     def _on_reset_clicked(self, button):
-        self.remaining_seconds = 0
-        self.total_seconds = 0
+        minutes = self.minutes_spin.get_value_as_int()
+        self.remaining_seconds = minutes * 60
+        self.total_seconds = self.remaining_seconds
         self.elapsed_time = 0
         self._update_time_label()
         #self.reset_button_revealer.set_reveal_child(False) #Removed
@@ -176,6 +177,10 @@ class PytimerWindow(Adw.ApplicationWindow):
 
     def _timer_finished(self):
         self.timer_running = False
+        minutes = self.minutes_spin.get_value_as_int()
+        self.remaining_seconds = minutes * 60
+        self.total_seconds = self.remaining_seconds
+        self._update_time_label()
         self.start_button.set_icon_name("media-playback-start-symbolic") # Set icon to start
         self.minutes_spin.set_sensitive(True)
         self._update_start_button_state()
