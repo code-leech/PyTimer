@@ -15,7 +15,10 @@ class PytimerWindow(Adw.ApplicationWindow):
     time_label = Gtk.Template.Child('time_label')
     minutes_spin = Gtk.Template.Child('minutes_spin')
     header_bar = Gtk.Template.Child('header_bar')
-    button_box = Gtk.Template.Child('button_box')
+    reset_button = Gtk.Template.Child('reset_button')
+    start_button = Gtk.Template.Child('start_button')
+    reset_revealer = Gtk.Template.Child('reset_revealer') # Added
+    #reset_button_revealer = Gtk.Template.Child('reset_button_revealer') # Removed
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -27,42 +30,43 @@ class PytimerWindow(Adw.ApplicationWindow):
         self.elapsed_time = 0
         self.start_time = 0
         self.timeout_id = None
-
-        # Create buttons programmatically
-        self.start_button = Gtk.Button()
-        self.start_button.set_icon_name("media-playback-start-symbolic")
-        self.start_button.add_css_class("circular")
-        self.start_button.add_css_class("raised")
-        self.start_button.connect('clicked', self._on_start_clicked)
-
-        self.reset_button = Gtk.Button()
-        self.reset_button.set_icon_name("edit-undo-symbolic")
-        self.reset_button.add_css_class("circular")
-        self.reset_button.add_css_class("small")
-        self.reset_button.add_css_class("destructive-action")
-        self.reset_button.set_visible(False)
-        self.reset_button.connect('clicked', self._on_reset_clicked)
-
-        # Add buttons to GtkFixed and set positions
-        self.button_box.put(self.start_button, 15, 0)
-        self.button_box.put(self.reset_button, 65, 0)
+        self.timer_paused_once = False
 
         # Connect signals
         self.minutes_spin.connect('value-changed', self._on_minutes_changed)
+        self.start_button.connect('clicked', self._on_start_clicked)
+        self.reset_button.connect('clicked', self._on_reset_clicked)
 
         # Set up drawing area
         self.progress_circle.set_draw_func(self.draw_timer_arc, None)
 
         # Add CSS for styling
         css_provider = Gtk.CssProvider()
-        css_provider.load_from_data(b"""
-            .timer-label { font-size: 48px; font-weight: 300; }
+        css_data = b"""
+            .timer-label { font-size: 48px; font-weight: 600; }
             .button-box { min-width: 300px; }
             button.circular { padding: 4px; margin: 2px; border-radius: 9999px; }
             button.small { padding: 2px; }
             headerbar { padding: 0; min-height: 24px; box-shadow: none; border-bottom: none; }
             window { margin: 0; }
-        """)
+
+            /* Add margin to the right side of the headerbar's end button */
+            headerbar .end button {
+                margin-right: 12px;
+            }
+
+            /* Make the reset button REALLY smaller */
+            .small-reset-button {
+                padding: 0px; /* Reduce padding even more */
+                min-width: 25px; /* Override min-width */
+                min-height: 25px; /* Override min-height */
+                font-size: 0.6em; /* Reduce font size even more */
+                border-width: 0px; /* Remove border */
+                margin: 0px; /* Remove margin */
+            }
+        """
+        css_provider.load_from_data(css_data)
+
         Gtk.StyleContext.add_provider_for_display(
             Gdk.Display.get_default(),
             css_provider,
@@ -78,10 +82,14 @@ class PytimerWindow(Adw.ApplicationWindow):
         self.total_seconds = 0
         self.elapsed_time = 0
         self._update_time_label()
-        self.reset_button.set_visible(False)
+        #self.reset_button_revealer.set_reveal_child(False) #Removed
         self.minutes_spin.set_sensitive(True)
         self.progress_circle.queue_draw()
         self._update_start_button_state()
+        self.timer_paused_once = False
+        self.reset_revealer.set_reveal_child(False)
+        self.start_button.set_icon_name("media-playback-start-symbolic")
+
 
     def _on_start_clicked(self, button):
         if not self.timer_running:
@@ -98,11 +106,9 @@ class PytimerWindow(Adw.ApplicationWindow):
                     self.remaining_seconds = self.total_seconds
             self.start_time = time.time() - self.elapsed_time
             self._start_timer()
-            button.set_icon_name("media-playback-stop-symbolic")
         else:
             self._stop_timer()
-            button.set_icon_name("media-playback-start-symbolic")
-            self.reset_button.set_visible(True)
+            #self.reset_button_revealer.set_reveal_child(False) #Removed
 
     def draw_timer_arc(self, area, cr, width, height, data):
         center_x = width / 2
@@ -135,7 +141,8 @@ class PytimerWindow(Adw.ApplicationWindow):
         self.timer_running = True
         self.timeout_id = GLib.timeout_add(16, self._update_timer)  # Update every ~16ms for 60fps
         self.minutes_spin.set_sensitive(False)
-        self.reset_button.set_visible(False)
+        self.start_button.set_icon_name("media-playback-pause-symbolic") # Set icon to pause
+        self.reset_revealer.set_reveal_child(False) # Ensure reset button is hidden
 
     def _stop_timer(self):
         self.timer_running = False
@@ -145,6 +152,8 @@ class PytimerWindow(Adw.ApplicationWindow):
         self.elapsed_time = time.time() - self.start_time  # Save the elapsed time
         self.minutes_spin.set_sensitive(False)  # Disable minutes_spin when paused
         self._update_start_button_state()
+        self.start_button.set_icon_name("media-playback-start-symbolic") # Set icon to start
+        self.reset_revealer.set_reveal_child(True) # Always reveal reset button on pause
 
     def _update_timer(self):
         if self.remaining_seconds > 0:
@@ -157,9 +166,6 @@ class PytimerWindow(Adw.ApplicationWindow):
             else:
                 self._timer_finished()
                 return False
-        else:
-            self._timer_finished()
-            return False
 
     def _update_time_label(self):
         if self.remaining_seconds < 0:
@@ -170,10 +176,8 @@ class PytimerWindow(Adw.ApplicationWindow):
 
     def _timer_finished(self):
         self.timer_running = False
-        self.start_button.set_icon_name("media-playback-start-symbolic")
+        self.start_button.set_icon_name("media-playback-start-symbolic") # Set icon to start
         self.minutes_spin.set_sensitive(True)
         self._update_start_button_state()
         self.elapsed_time = 0  # Reset elapsed time when the timer finishes
-
-    def on_close_button_clicked(self, button):
-        self.close()
+        self.reset_revealer.set_reveal_child(False) # Ensure reset button is hidden

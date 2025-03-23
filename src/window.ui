@@ -5,6 +5,7 @@
   <template class="PytimerWindow" parent="AdwApplicationWindow">
     <property name="default-width">400</property>
     <property name="default-height">400</property>
+    <property name="resizable">false</property>
     <property name="title" translatable="yes">PyTimer</property>
     <child>
       <object class="AdwToolbarView">
@@ -84,10 +85,6 @@
         <child type="bottom">
           <object class="AdwHeaderBar" id="header_bar">
             <property name="hexpand">true</property>
-            <property name="title-widget">
-              <object class="GtkFixed" id="button_box">
-              </object>
-            </property>
             <child type="start">
               <object class="GtkMenuButton">
                 <property name="valign">center</property>
@@ -99,6 +96,46 @@
                   <class name="circular"/>
                   <class name="flat"/>
                 </style>
+              </object>
+            </child>
+            <child type="title">
+              <object class="GtkBox">
+                <property name="orientation">horizontal</property>
+                <property name="hexpand">True</property>
+                <property name="halign">center</property>
+                <child>
+                 <object class="GtkButton" id="start_button">
+                    <property name="valign">center</property>
+                    <property name="halign">center</property>
+                    <property name="hexpand">False</property>
+                    <property name="margin-start">39</property>
+                    <property name="icon-name">media-playback-start-symbolic</property>
+                    <style>
+                      <class name="circular"/>
+                      <class name="raised"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkRevealer" id="reset_revealer">
+                    <property name="reveal-child">False</property>
+                    <child>
+                      <object class="GtkButton" id="reset_button">
+                        <property name="valign">center</property>
+                        <property name="halign">center</property>
+                        <property name="margin-start">8</property>
+                        <property name="hexpand">False</property>
+                        <property name="icon-name">view-refresh-symbolic</property>
+                        <property name="css-classes">small-reset-button</property>
+                         <style>
+                          <class name="circular"/>
+                          <class name="small"/>
+                          <class name="destructive-action"/>
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
