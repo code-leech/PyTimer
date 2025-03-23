@@ -1,3 +1,22 @@
+# window.py
+#
+# Copyright 2025 CodeLeech
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+
 import math
 import time
 import gi
@@ -17,8 +36,7 @@ class PytimerWindow(Adw.ApplicationWindow):
     header_bar = Gtk.Template.Child('header_bar')
     reset_button = Gtk.Template.Child('reset_button')
     start_button = Gtk.Template.Child('start_button')
-    reset_revealer = Gtk.Template.Child('reset_revealer') # Added
-    #reset_button_revealer = Gtk.Template.Child('reset_button_revealer') # Removed
+    reset_revealer = Gtk.Template.Child('reset_revealer')
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -30,7 +48,6 @@ class PytimerWindow(Adw.ApplicationWindow):
         self.elapsed_time = 0
         self.start_time = 0
         self.timeout_id = None
-        self.timer_paused_once = False
 
         # Connect signals
         self.minutes_spin.connect('value-changed', self._on_minutes_changed)
@@ -87,7 +104,6 @@ class PytimerWindow(Adw.ApplicationWindow):
         self.minutes_spin.set_sensitive(True)
         self.progress_circle.queue_draw()
         self._update_start_button_state()
-        self.timer_paused_once = False
         self.reset_revealer.set_reveal_child(False)
         self.start_button.set_icon_name("media-playback-start-symbolic")
 

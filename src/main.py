@@ -1,6 +1,6 @@
 # main.py
 #
-# Copyright 2025 Carbon751
+# Copyright 2025 CodeLeech
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -35,7 +35,6 @@ class PytimerApplication(Adw.Application):
                          flags=Gio.ApplicationFlags.DEFAULT_FLAGS)
         self.create_action('quit', lambda *_: self.quit(), ['<primary>q'])
         self.create_action('about', self.on_about_action)
-        self.create_action('preferences', self.on_preferences_action)
 
     def do_activate(self):
         """Called when the application is activated.
@@ -50,19 +49,13 @@ class PytimerApplication(Adw.Application):
 
     def on_about_action(self, *args):
         """Callback for the app.about action."""
-        about = Adw.AboutDialog(application_name='pytimer',
+        about = Adw.AboutDialog(application_name='PyTimer',
                                 application_icon='code.leech.pytimer',
-                                developer_name='Carbon751',
+                                developer_name='CodeLeech',
                                 version='0.1.0',
-                                developers=['Carbon751'],
-                                copyright='© 2025 Carbon751')
-        # Translators: Replace "translator-credits" with your name/username, and optionally an email or URL.
-        about.set_translator_credits(_('translator-credits'))
+                                developers=['CodeLeech https://github.com/code-leech', 'GTK Devs https://gtk.org'],
+                                copyright='© 2025 CodeLeech')
         about.present(self.props.active_window)
-
-    def on_preferences_action(self, widget, _):
-        """Callback for the app.preferences action."""
-        print('app.preferences action activated')
 
     def create_action(self, name, callback, shortcuts=None):
         """Add an application action.

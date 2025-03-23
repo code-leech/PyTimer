@@ -1,5 +1,5 @@
 [Desktop Entry]
-Name=pytimer
+Name=PyTimer
 Exec=pytimer
 Icon=code.leech.pytimer
 Terminal=false
